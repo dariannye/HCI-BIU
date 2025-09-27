@@ -25,26 +25,26 @@ El proyecto está organizado en tres carpetas principales:
 ### 🏠 Página de Inicio
 
 Es la primera pantalla que ve el usuario. Presenta de manera visual los servicios de la clínica, un banner principal y accesos rápidos a los módulos principales.
-![Inicio](assets/inicio.jpg)
+![Inicio](./assets/inicio.jpg)
 
 ### 🏥 Servicios Médicos
 
 Sección donde se muestran los servicios que ofrece la clínica (emergencias, consultas, cirugía, análisis). Cada servicio está representado en tarjetas con íconos y descripciones.
-![Servicios Médicos](assets/servicios.jpg)
+![Servicios Médicos](./assets/servicios.jpg)
 
 ### 📅 Agendar Cita
 
 Permite a los pacientes reservar una cita médica de manera sencilla, eligiendo especialidad, doctor y horario disponible.
-![Agendar Cita](assets/citas.jpg)
+![Agendar Cita](./assets/citas.jpg)
 
 ### 📖 Directorio Médico
 
 Listado de especialidades y médicos de la clínica, con foto, nombre, contacto y horario de atención.
-![Directorio Médico](assets/directorio.jpg)
+![Directorio Médico](./assets/directorio.jpg)
 
 ### 🔑 Login y Registro
 
 Sistema de autenticación para que los pacientes puedan iniciar sesión o crear una nueva cuenta. Incluye validaciones básicas de correo y contraseña.
-![Login](assets/login.jpg)
-![Registro](assets/registro.jpg)
+![Login](./assets/login.jpg)
+![Registro](./assets/registro.jpg)
 
