@@ -5,6 +5,9 @@ import Register from "../pages/Register";
 import Appointments from "../pages/Appointments";
 import Services from "../pages/Services";
 import Dashboard from "../pages/PatientDashboard";
+import Directory from "../pages/DoctorDirectory";
+
+
 
 export default function AppRoutes() {
   return (
@@ -16,6 +19,7 @@ export default function AppRoutes() {
         <Route path="/appointments" element={<Appointments />} />
         <Route path="/services" element={<Services />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/doctor-directory" element={<Directory />} />
 
       </Routes>
     </BrowserRouter>
