@@ -47,4 +47,6 @@ Listado de especialidades y médicos de la clínica, con foto, nombre, contacto 
 Sistema de autenticación para que los pacientes puedan iniciar sesión o crear una nueva cuenta. Incluye validaciones básicas de correo y contraseña.
 ![Login](./src/assets/login.jpg)
 ![Registro](./src/assets/registro.jpg)
+<img width="887" height="630" alt="image" src="https://github.com/user-attachments/assets/07760c28-6839-4f48-960c-81d297e29d5f" />
+
 
