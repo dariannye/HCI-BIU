@@ -11,7 +11,7 @@ export default function Hero() {
       </p>
       <div className="mt-6">
         <Link to="/login" className="bg-blue-600 text-white px-6 py-3 rounded-lg shadow hover:bg-blue-700">
-          Agendar Cita
+          Mis consultas
         </Link>
       </div>
     </section>
