@@ -25,7 +25,7 @@ El proyecto está organizado en tres carpetas principales:
 ### 🏠 Página de Inicio
 
 Es la primera pantalla que ve el usuario. Presenta de manera visual los servicios de la clínica, un banner principal y accesos rápidos a los módulos principales.
-![Inicio](./src/assets/inicio.jpg)
+![Inicio](./Fronted/Sistema-Cita-Medicas-HCI/src/assets/inicio.jpg)
 
 ### 🏥 Servicios Médicos
 
