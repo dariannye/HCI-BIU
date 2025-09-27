@@ -4,6 +4,7 @@ import Login from "../pages/Login";
 import Register from "../pages/Register";
 import Appointments from "../pages/Appointments";
 import Services from "../pages/Services";
+import Dashboard from "../pages/PatientDashboard";
 
 export default function AppRoutes() {
   return (
@@ -14,6 +15,7 @@ export default function AppRoutes() {
         <Route path="/register" element={<Register />} />
         <Route path="/appointments" element={<Appointments />} />
         <Route path="/services" element={<Services />} />
+        <Route path="/dashboard" element={<Dashboard />} />
 
       </Routes>
     </BrowserRouter>

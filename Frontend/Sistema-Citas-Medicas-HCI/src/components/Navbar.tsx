@@ -32,7 +32,7 @@ export default function Navbar() {
           Servicios
         </Link>
         <Link
-          to="/services"
+          to="/appointments"
           className="text-gray-600 font-medium hover:text-blue-600 transition"
         >
           Agendar Cita
