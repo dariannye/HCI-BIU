@@ -1,4 +1,5 @@
-import { Link } from "react-router-dom";
+import Footer from "../components/Footer";
+import Navbar from "../components/Navbar";
 
 export default function Servicios() {
   const services = [
@@ -29,6 +30,8 @@ export default function Servicios() {
   ];
 
   return (
+    <div className="min-h-screen flex flex-col bg-gray-50">
+      <Navbar />
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 py-12 px-6">
       {/* Encabezado */}
       <div className="text-center mb-12">
@@ -53,16 +56,8 @@ export default function Servicios() {
           </div>
         ))}
       </div>
-
-      {/* Botón de volver */}
-      <div className="text-center mt-12">
-        <Link
-          to="/"
-          className="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition"
-        >
-          Volver al inicio
-        </Link>
-      </div>
+    </div>
+    <Footer />
     </div>
   );
 }

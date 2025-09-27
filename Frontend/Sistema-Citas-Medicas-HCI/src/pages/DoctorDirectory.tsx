@@ -8,6 +8,8 @@ import GinecologiaImg from "../assets/Ginecologia.jpg";
 import OftalmologiaImg from "../assets/Oftamologia.jpg";
 import OtorrinoImg from "../assets/Otorrinolaringologia.jpg";
 import UrologiaImg from "../assets/Urologia.jpg";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
 export default function DoctorDirectory() {
   const doctors = [
@@ -94,6 +96,8 @@ export default function DoctorDirectory() {
   ];
 
   return (
+    <div className="min-h-screen flex flex-col bg-gray-50">
+      <Navbar />
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 py-12 px-6">
       <div className="max-w-6xl mx-auto">
         <h1 className="text-4xl font-bold text-blue-700 text-center mb-10">
@@ -130,6 +134,8 @@ export default function DoctorDirectory() {
           ))}
         </div>
       </div>
+    </div>
+    <Footer />
     </div>
   );
 }
