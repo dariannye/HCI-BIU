@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import ImagenPrincipal from "../assets/ImagenPrincipal.png";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -15,7 +16,14 @@ export default function Login() {
       <div className="bg-white shadow-2xl rounded-2xl p-8 w-full max-w-md">
         {/* Logo / Título */}
         <div className="text-center mb-6">
-          <h1 className="text-3xl font-bold text-blue-600">Sistema Médico</h1>
+          <Link to="/" className="flex items-center justify-center gap-2 text-3xl font-bold text-blue-600">
+            <img
+              src={ImagenPrincipal}
+              alt="Imagen principal del sistema"
+              className="w-8 h-8 rounded-lg shadow-md"
+            />
+            HOSPITEX
+          </Link>
           <p className="text-gray-500">Inicia sesión para continuar</p>
         </div>
 

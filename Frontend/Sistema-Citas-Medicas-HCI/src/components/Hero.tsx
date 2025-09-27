@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export default function Hero() {
   return (
     <section className="bg-gradient-to-r from-blue-50 to-blue-100 py-20 text-center">
@@ -8,9 +10,9 @@ export default function Hero() {
         Agenda tus citas médicas de forma rápida, sencilla y segura.
       </p>
       <div className="mt-6">
-        <button className="bg-blue-600 text-white px-6 py-3 rounded-lg shadow hover:bg-blue-700">
+        <Link to="/login" className="bg-blue-600 text-white px-6 py-3 rounded-lg shadow hover:bg-blue-700">
           Agendar Cita
-        </button>
+        </Link>
       </div>
     </section>
   );
