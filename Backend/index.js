@@ -2,6 +2,17 @@ require("dotenv").config();
 const express = require("express");
 const app = express();
 app.use(express.json());
+const cors = require("cors");
+
+// ✅ Configuración de CORS
+app.use(
+  cors({
+    origin: "http://localhost:5173", 
+    credentials: true, 
+  })
+);
+
+app.use(express.json());
 
 // Rutas
 app.use("/auth", require("./routes/auth")); 

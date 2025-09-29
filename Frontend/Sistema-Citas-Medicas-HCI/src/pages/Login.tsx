@@ -1,16 +1,49 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import ImagenPrincipal from "../assets/ImagenPrincipal.png";
+import { login } from "../services/authApi"; 
+import axios, { AxiosError } from "axios"; 
+
+interface User {
+  id: number;
+  email: string;
+  role: string;
+}
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Login con", email, password);
-    navigate("/dashboard");
+    setError("");
+
+    try {
+      const data = await login(email, password);
+
+      // Guardamos en localStorage
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user as User));
+
+      // Redirección según el rol
+    const role = data.user.role;
+    if (role === "admin") {
+      navigate("/admin");
+    } else {
+      navigate("/dashboard");
+    }
+
+    } catch (err) {
+      // 👇 Manejo tipado del error
+      if (axios.isAxiosError(err)) {
+        const serverError = err as AxiosError<{ message: string }>;
+        setError(serverError.response?.data?.message || "Error en el login");
+      } else {
+        setError("Ocurrió un error inesperado");
+      }
+    }
   };
 
   return (
@@ -18,7 +51,10 @@ export default function Login() {
       <div className="bg-white shadow-2xl rounded-2xl p-8 w-full max-w-md">
         {/* Logo / Título */}
         <div className="text-center mb-6">
-          <Link to="/" className="flex items-center justify-center gap-2 text-3xl font-bold text-blue-600">
+          <Link
+            to="/"
+            className="flex items-center justify-center gap-2 text-3xl font-bold text-blue-600"
+          >
             <img
               src={ImagenPrincipal}
               alt="Imagen principal del sistema"
@@ -31,6 +67,12 @@ export default function Login() {
 
         {/* Formulario */}
         <form onSubmit={handleLogin} className="space-y-5">
+          {error && (
+            <p className="text-red-500 text-sm text-center font-medium">
+              {error}
+            </p>
+          )}
+
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Correo electrónico
