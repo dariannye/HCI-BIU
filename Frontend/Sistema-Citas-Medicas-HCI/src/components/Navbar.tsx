@@ -1,7 +1,32 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
 import ImagenPrincipal from "../assets/ImagenPrincipal.png";
 
 export default function Navbar() {
+  const navigate = useNavigate();
+
+  // Estado simulado de login (puedes cambiarlo con Context o Redux después)
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const handleAppointmentClick = (e: { preventDefault: () => void; }) => {
+    e.preventDefault();
+    if (isLoggedIn) {
+      navigate("/appointments");
+    } else {
+      navigate("/login");
+    }
+  };
+
+  const handleAuthClick = () => {
+    if (isLoggedIn) {
+      // Aquí iría tu lógica para cerrar sesión (ej: limpiar tokens/localStorage)
+      setIsLoggedIn(false);
+      navigate("/");
+    } else {
+      navigate("/login");
+    }
+  };
+
   return (
     <nav className="bg-white text-blue-700 px-8 py-4 flex justify-between items-center shadow-md">
       {/* Logo + Título */}
@@ -31,22 +56,23 @@ export default function Navbar() {
         >
           Servicios
         </Link>
-        <Link
-          to="/appointments"
-          className="text-gray-600 font-medium hover:text-blue-600 transition"
+        <a
+          href="/appointments"
+          onClick={handleAppointmentClick}
+          className="text-gray-600 font-medium hover:text-blue-600 transition cursor-pointer"
         >
           Agendar Cita
-        </Link>
+        </a>
       </div>
 
-      {/* Botón Login */}
+      {/* Botón dinámico */}
       <div>
-        <Link
-          to="/login"
+        <button
+          onClick={handleAuthClick}
           className="bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 transition"
         >
-          Iniciar Sesión
-        </Link>
+          {isLoggedIn ? "Cerrar Sesión" : "Iniciar Sesión"}
+        </button>
       </div>
     </nav>
   );

@@ -1,7 +1,24 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import ImagenPrincipal from "../assets/ImagenPrincipal.png";
 
 export default function PatientDashboard() {
+  const [patientName, setPatientName] = useState("");
+
+  useEffect(() => {
+    // Intentar obtener el usuario guardado en localStorage
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      try {
+        const user = JSON.parse(storedUser);
+        // Puedes ajustar según tu backend: user.first_name + user.last_name
+        setPatientName(`${user.first_name} ${user.last_name}`);
+      } catch (err) {
+        console.error("Error leyendo usuario:", err);
+      }
+    }
+  }, []);
+
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
       {/* Navbar */}
@@ -21,7 +38,7 @@ export default function PatientDashboard() {
 
         {/* Menú simple */}
         <div className="space-x-6 font-medium">
-          <Link to="/appointmentss" className="hover:text-blue-500">
+          <Link to="/appointments" className="hover:text-blue-500">
             Mis Citas
           </Link>
           <Link to="/services" className="hover:text-blue-500">
@@ -41,7 +58,10 @@ export default function PatientDashboard() {
       {/* 🔹 Contenido */}
       <main className="flex-grow p-8">
         <h2 className="text-2xl font-semibold mb-4">
-          Bienvenido, <span className="text-blue-600">[Nombre del Paciente]</span>
+          Bienvenido,{" "}
+          <span className="text-blue-600">
+            {patientName || "Paciente"}
+          </span>
         </h2>
         <p className="mb-6 text-gray-700">
           Aquí puedes ver y gestionar tus citas médicas.
@@ -55,15 +75,18 @@ export default function PatientDashboard() {
           </div>
 
           <div className="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
-            <Link to="/appointments" className="text-lg font-bold text-blue-600 mb-2">➕ Nueva Cita</Link>
+            <Link to="/appointments" className="text-lg font-bold text-blue-600 mb-2">
+              ➕ Nueva Cita
+            </Link>
             <p className="text-gray-600">Agenda una nueva cita con tu médico.</p>
           </div>
 
           <div className="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
-            <Link to="/doctor-directory" className="text-lg font-bold text-blue-600 mb-2">🧑‍⚕️ Directorio Médico</Link>
+            <Link to="/doctor-directory" className="text-lg font-bold text-blue-600 mb-2">
+              🧑‍⚕️ Directorio Médico
+            </Link>
             <p className="text-gray-600">Encuentra médicos disponibles.</p>
           </div>
-
         </div>
       </main>
     </div>

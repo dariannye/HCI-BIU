@@ -3,12 +3,12 @@ const bcrypt = require("bcryptjs");
 
 class User {
   static async getAll() {
-    const [rows] = await db.query("SELECT * FROM users ORDER BY id");
+    const [rows] = await db.query("SELECT id, first_name, last_name, email, phone, role FROM users ORDER BY id");
     return rows;
   }
 
   static async getById(id) {
-    const [rows] = await db.query("SELECT * FROM users WHERE id = ?", [id]);
+    const [rows] = await db.query("SELECT id, first_name, last_name, email, phone, role FROM users WHERE id = ?", [id]);
     return rows[0];
   }
 

@@ -1,27 +1,52 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import ImagenPrincipal from "../assets/ImagenPrincipal.png";
+import axios from "axios";
 
 export default function Register() {
-  const [fullName, setFullName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [maritalStatus, setMaritalStatus] = useState("");
+  const [gender, setGender] = useState("");
   const [address, setAddress] = useState("");
   const [birthDate, setBirthDate] = useState("");
   const [phone, setPhone] = useState("");
 
-  const handleRegister = (e: React.FormEvent) => {
+  const navigate = useNavigate();
+
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Registro con", {
-      fullName,
-      email,
-      password,
-      maritalStatus,
-      address,
-      birthDate,
-      phone,
-    });
+
+    try {
+      // Crear usuario en tabla users
+      const userRes = await axios.post("http://localhost:4000/auth/register", {
+        first_name: firstName,
+        last_name: lastName,
+        email,
+        password,
+        phone,
+        role: "patient",
+      });
+
+      const newUser = userRes.data.user;
+
+      // Crear paciente en tabla patients
+      await axios.post("http://localhost:4000/patients", {
+        user_id: newUser.id,
+        birth_date: birthDate,
+        address,
+        gender,
+        marital_status: maritalStatus,
+      });
+
+      alert("Registro exitoso 🎉 Ahora puedes iniciar sesión");
+      navigate("/login");
+    } catch (error) {
+      console.error("Error en el registro", error);
+      alert("Hubo un error al registrar. Intenta de nuevo.");
+    }
   };
 
   return (
@@ -29,7 +54,10 @@ export default function Register() {
       <div className="bg-white shadow-2xl rounded-2xl p-8 w-full max-w-3xl">
         {/* Logo / Título */}
         <div className="text-center mb-6">
-          <Link to="/" className="flex items-center justify-center gap-2 text-3xl font-bold text-blue-600">
+          <Link
+            to="/"
+            className="flex items-center justify-center gap-2 text-3xl font-bold text-blue-600"
+          >
             <img
               src={ImagenPrincipal}
               alt="Imagen principal del sistema"
@@ -37,21 +65,39 @@ export default function Register() {
             />
             HOSPITEX
           </Link>
-          <p className="text-gray-500">Crea tu cuenta para continuar</p>
+          <p className="text-gray-500">Crea tu cuenta como paciente</p>
         </div>
 
         {/* Formulario */}
-        <form onSubmit={handleRegister} className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Nombre Completo */}
+        <form
+          onSubmit={handleRegister}
+          className="grid grid-cols-1 md:grid-cols-2 gap-6"
+        >
+          {/* Nombre */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Nombre Completo
+              Nombre
             </label>
             <input
               type="text"
-              placeholder="Juan Pérez"
-              value={fullName}
-              onChange={(e) => setFullName(e.target.value)}
+              placeholder="Juan"
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+              required
+              className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            />
+          </div>
+
+          {/* Apellido */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Apellido
+            </label>
+            <input
+              type="text"
+              placeholder="Pérez"
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
               required
               className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
             />
@@ -103,6 +149,24 @@ export default function Register() {
               <option value="casado">Casado</option>
               <option value="divorciado">Divorciado</option>
               <option value="viudo">Viudo</option>
+            </select>
+          </div>
+
+          {/* Género */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Género
+            </label>
+            <select
+              value={gender}
+              onChange={(e) => setGender(e.target.value)}
+              required
+              className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            >
+              <option value="">Selecciona</option>
+              <option value="masculino">Masculino</option>
+              <option value="femenino">Femenino</option>
+              <option value="otro">Otro</option>
             </select>
           </div>
 

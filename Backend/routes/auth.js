@@ -16,19 +16,7 @@ router.post("/register", async (req, res) => {
       return res.status(400).json({ error: "El email ya está registrado" });
     }
 
-    // Encriptar contraseña
-    const salt = await bcrypt.genSalt(10);
-    const password_hash = await bcrypt.hash(password, salt);
-
-    // Crear usuario
-    const newUser = await User.create({
-      first_name,
-      last_name,
-      email,
-      phone,
-      role,
-      password_hash,
-    });
+    const newUser = await User.create({ first_name, last_name, email, phone, role, password });
 
     res.status(201).json({ message: "Usuario registrado con éxito", user: newUser });
   } catch (err) {
