@@ -1,16 +1,32 @@
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { useState } from "react";
+import { doctors} from "../data/Alldoctors"; 
+import type { Doctor } from "../data/Alldoctors"; 
 
 export default function Appointment() {
   const [formData, setFormData] = useState({
     especialidad: "",
+    doctor: "",
     fecha: "",
     hora: "",
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  /*const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };*/
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    let updatedDoctor = formData.doctor;
+
+    // Si cambia la especialidad, buscamos el doctor correspondiente
+    if (name === "especialidad") {
+      const selectedDoctor = doctors.find((d) => d.specialty === value);
+      updatedDoctor = selectedDoctor ? selectedDoctor.name : "";
+    }
+
+    setFormData({ ...formData, [name]: value, doctor: updatedDoctor });
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -44,16 +60,25 @@ export default function Appointment() {
                 className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
               >
                 <option value="">Selecciona una especialidad</option>
-                <option value="cardiologia">Cardiología</option>
-                <option value="dermatologia">Dermatología</option>
-                <option value="ginecologia">Ginecología</option>
-                <option value="neumologia">Neumología</option>
-                <option value="nutricion">Nutrición</option>
-                <option value="oftalmologia">Oftalmología</option>
-                <option value="ortopedia">Ortopedia</option>
-                <option value="pediatria">Pediatría</option>
-                <option value="urologia">Urología</option>
+                {doctors.map((doc: Doctor) => (
+                  <option key={doc.id} value={doc.specialty}>
+                    {doc.specialty}
+                  </option>
+                ))}
               </select>
+            </div>
+
+            <div>
+              <label className="block text-gray-700 font-medium mb-1">
+                Doctor
+              </label>
+              <input
+                type="text"
+                name="doctor"
+                value={formData.doctor}
+                readOnly
+                className="w-full px-4 py-2 border rounded-lg bg-gray-100 cursor-not-allowed"
+              />
             </div>
 
             {/* Fecha */}
