@@ -3,6 +3,7 @@ import Footer from "../components/Footer";
 import { useState } from "react";
 import { doctors} from "../data/Alldoctors"; 
 import type { Doctor } from "../data/Alldoctors"; 
+import { useNavigate } from "react-router-dom";
 
 export default function Appointment() {
   const [formData, setFormData] = useState({
@@ -11,6 +12,9 @@ export default function Appointment() {
     fecha: "",
     hora: "",
   });
+
+  const navigate = useNavigate();
+
 
   /*const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -31,8 +35,23 @@ export default function Appointment() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Datos enviados:", formData);
+    // Guardar cita en localStorage
+    const storedAppointments = localStorage.getItem("appointments");
+    const appointments = storedAppointments ? JSON.parse(storedAppointments) : [];
+
+    appointments.push(formData); // agregar la nueva cita
+    localStorage.setItem("appointments", JSON.stringify(appointments));
+    //console.log("Datos enviados:", formData);
     alert("¡Tu cita ha sido agendada con éxito!");
+    //Limpiar el formulario
+   setFormData({
+      especialidad: "",
+      doctor: "", 
+      fecha: "",
+      hora: "",
+   });
+
+
   };
 
   return (
@@ -121,6 +140,16 @@ export default function Appointment() {
           </form>
         </div>
       </main>
+
+     <div className="flex justify-end px-8 py-4">
+        <button
+          type="button"
+          onClick={() => navigate("/patient-appointments")}
+          className="bg-blue-600 text-white px-10 py-4 rounded-full shadow-lg hover:bg-blue-700 transition"
+        >
+          Ver Mis Citas
+        </button>
+      </div>
 
       <Footer />
     </div>
