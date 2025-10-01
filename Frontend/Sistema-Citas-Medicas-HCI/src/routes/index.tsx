@@ -9,6 +9,7 @@ import Directory from "../pages/DoctorDirectory";
 import AdminDashboard from "../pages/AdminDashboard";
 import DoctorCRUD from "../pages/DoctorsCRUD";
 import SpecialtyCRUD from "../pages/SpecialtiesCRUD";
+import PatientAppointments from "../pages/PatientAppointments";
 
 export default function AppRoutes() {
   return (
@@ -21,6 +22,7 @@ export default function AppRoutes() {
         <Route path="/services" element={<Services />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/doctor-directory" element={<Directory />} />
+        <Route path="/patient-appointments" element={<PatientAppointments />} />
 
         {/* Nueva ruta para administrador */}
         <Route path="/admin" element={<AdminDashboard />} /> 

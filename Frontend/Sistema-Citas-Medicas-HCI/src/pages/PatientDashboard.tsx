@@ -70,7 +70,9 @@ export default function PatientDashboard() {
         {/* Tarjetas de opciones */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
-            <h3 className="text-lg font-bold text-blue-600 mb-2">📅 Próximas Citas</h3>
+             <Link to="/patient-appointments" className="text-lg font-bold text-blue-600 mb-2">
+              📅 Próximas Citas
+            </Link>
             <p className="text-gray-600">Consulta tus citas agendadas.</p>
           </div>
 
