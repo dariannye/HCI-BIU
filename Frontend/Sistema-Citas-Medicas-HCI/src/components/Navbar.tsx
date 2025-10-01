@@ -1,23 +1,48 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useContext  } from "react";
 import ImagenPrincipal from "../assets/ImagenPrincipal.png";
+import { AuthContext } from "../context/AuthContext";
 
 export default function Navbar() {
   const navigate = useNavigate();
+    const authContext = useContext(AuthContext);
 
-  // Estado simulado de login (puedes cambiarlo con Context o Redux después)
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  if (!authContext) throw new Error("AuthContext must be used within AuthProvider");
+  const { user, logout } = authContext;
+  const isLoggedIn = !!user; // true si hay usuario
 
-  const handleAppointmentClick = (e: { preventDefault: () => void; }) => {
+  const handleAppointmentClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     if (isLoggedIn) {
       navigate("/appointments");
     } else {
       navigate("/login");
     }
-  };
+  }
 
   const handleAuthClick = () => {
+    if (isLoggedIn) {
+      // Cerrar sesión
+      logout();
+      navigate("/"); // redirige a home
+    } else {
+      navigate("/login");
+    }
+  }
+
+  // Estado simulado de login (puedes cambiarlo con Context o Redux después)
+  //const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+ /* const handleAppointmentClick = (e: { preventDefault: () => void; }) => {
+    e.preventDefault();
+    if (isLoggedIn) {
+      navigate("/appointments");
+    } else {
+      navigate("/login");
+    }
+  };*/
+
+  /*const handleAuthClick = () => {
     if (isLoggedIn) {
       // Aquí iría tu lógica para cerrar sesión (ej: limpiar tokens/localStorage)
       setIsLoggedIn(false);
@@ -25,7 +50,7 @@ export default function Navbar() {
     } else {
       navigate("/login");
     }
-  };
+  };*/
 
   return (
     <nav className="bg-white text-blue-700 px-8 py-4 flex justify-between items-center shadow-md">

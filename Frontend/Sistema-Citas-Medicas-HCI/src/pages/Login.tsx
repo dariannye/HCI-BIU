@@ -1,20 +1,24 @@
-import { useState } from "react";
+import { useState,  useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import ImagenPrincipal from "../assets/ImagenPrincipal.png";
 import { login } from "../services/authApi"; 
 import axios, { AxiosError } from "axios"; 
+import { AuthContext } from "../context/AuthContext";
+import type { User } from "../context/AuthContext";
 
-interface User {
-  id: number;
-  email: string;
-  role: string;
-}
+
+
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
+
+
+  const authContext = useContext(AuthContext);
+  if (!authContext) throw new Error("AuthContext must be used within AuthProvider");
+  const { login: loginContext } = authContext;
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -24,8 +28,10 @@ export default function Login() {
       const data = await login(email, password);
 
       // Guardamos en localStorage
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("user", JSON.stringify(data.user as User));
+      /*localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user as User));*/
+
+      loginContext(data.user as User, data.token);
 
       // Redirección según el rol
     const role = data.user.role;
