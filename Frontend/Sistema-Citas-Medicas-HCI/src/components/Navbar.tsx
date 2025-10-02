@@ -11,6 +11,14 @@ export default function Navbar() {
   const { user, logout } = authContext;
   const isLoggedIn = !!user; // true si hay usuario
 
+  const handleLogoClick = () => {
+    if (isLoggedIn) {
+      navigate("/dashboard"); // 🔹 Dashboard del paciente
+    } else {
+      navigate("/"); // 🔹 Home si no está logueado
+    }
+  };
+
   const handleAppointmentClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     if (isLoggedIn) {
@@ -55,9 +63,9 @@ export default function Navbar() {
   return (
     <nav className="bg-white text-blue-700 px-8 py-4 flex justify-between items-center shadow-md">
       {/* Logo + Título */}
-      <Link
-        to="/"
-        className="flex items-center gap-3 text-2xl font-bold hover:opacity-90 transition"
+      <div
+        onClick={handleLogoClick}
+        className="flex items-center gap-3 text-2xl font-bold hover:opacity-90 transition cursor-pointer"
       >
         <img
           src={ImagenPrincipal}
@@ -65,7 +73,7 @@ export default function Navbar() {
           className="w-10 h-10 rounded-xl shadow-md"
         />
         HOSPITEX
-      </Link>
+      </div>
 
       {/* Menú de navegación */}
       <div className="flex justify-center items-center h-12 space-x-8">
