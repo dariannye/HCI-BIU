@@ -11,6 +11,7 @@ import DoctorCRUD from "../pages/DoctorsCRUD";
 import SpecialtyCRUD from "../pages/SpecialtiesCRUD";
 import PatientAppointments from "../pages/PatientAppointments";
 import DoctorsAvailability from "../pages/DoctorAvailability";
+import DoctorDashboard from "../pages/DoctorDashboard";
 
 export default function AppRoutes() {
   return (
@@ -30,6 +31,9 @@ export default function AppRoutes() {
         <Route path="/admin/doctors" element={<DoctorCRUD />} />
         <Route path="/admin/specialties" element={<SpecialtyCRUD />} />
         <Route path="/admin/doctor-availability" element={<DoctorsAvailability />} />
+
+        {/* Ruta para el dashboard del doctor */}
+        <Route path="/doctor-dashboard" element={<DoctorDashboard />} />
 
       </Routes>
     </BrowserRouter>
