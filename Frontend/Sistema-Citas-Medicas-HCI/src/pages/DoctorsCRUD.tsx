@@ -15,8 +15,8 @@ interface Doctor {
   id: number;
   first_name: string;
   last_name: string;
-  specialty_id: number; // usamos el id
-  specialty_name?: string; // opcional: lo devuelve el backend con join
+  specialty_id: number;
+  specialty_name?: string;
   email: string;
   phone: string;
   photo_url: string;

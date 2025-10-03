@@ -4,7 +4,6 @@ const DoctorAvailability = require("../models/DoctorAvailability");
 
 // Listar todas las disponibilidades
 router.get("/", async (req, res) => {
-  console.log("📌 GET /api/doctor-availability llamado");
   try {
     const list = await DoctorAvailability.getAll();
     res.json(list);

@@ -5,12 +5,14 @@ const Doctor = require("../models/Doctor");
 const DoctorAvailability = require("../models/DoctorAvailability");
 const User = require("../models/User");
 
-// Listar todos los doctores (con specialty y user)
+// Listar todos los doctores 
 router.get("/", async (req, res) => {
   try {
-    const list = await Doctor.getAll();
-    res.json(list);
-  } catch (err) { res.status(500).json({ error: err.message }); }
+    const doctors = await Doctor.getAll(); 
+    res.json(doctors);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 // Obtener doctor por id
