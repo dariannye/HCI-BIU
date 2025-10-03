@@ -12,6 +12,19 @@ router.get("/", async (req, res) => {
   }
 });
 
+// Buscar paciente por userId
+router.get("/by-user/:userId", async (req, res) => {
+  try {
+    const patient = await Patient.findByUserId(req.params.userId);
+    if (!patient) {
+      return res.status(404).json({ error: "Paciente no encontrado" });
+    }
+    res.json(patient);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // Obtener paciente por id
 router.get("/:id", async (req, res) => {
   try {

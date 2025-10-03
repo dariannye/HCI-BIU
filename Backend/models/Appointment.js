@@ -3,30 +3,74 @@ const db = require("../config/db");
 class Appointment {
   static async getAll() {
     const [rows] = await db.query(
-      `SELECT a.*, p.user_id AS patient_user_id, u.first_name AS patient_first_name,
-              d.user_id AS doctor_user_id, ud.first_name AS doctor_first_name
+      `SELECT a.id, a.appointment_date, a.appointment_time, a.reason,
+              s.name AS specialty_name,
+              p.id AS patient_id, u.first_name AS patient_first_name, u.last_name AS patient_last_name,
+              d.id AS doctor_id, ud.first_name AS doctor_first_name, ud.last_name AS doctor_last_name
        FROM appointments a
        JOIN patients p ON a.patient_id = p.id
        JOIN users u ON p.user_id = u.id
        JOIN doctors d ON a.doctor_id = d.id
        JOIN users ud ON d.user_id = ud.id
+       JOIN specialties s ON d.specialty_id = s.id
        ORDER BY a.appointment_date, a.appointment_time`
     );
     return rows;
   }
 
   static async getById(id) {
-    const [rows] = await db.query("SELECT * FROM appointments WHERE id = ?", [id]);
+    const [rows] = await db.query(
+      `SELECT a.id, a.appointment_date, a.appointment_time, a.reason,
+              s.name AS specialty_name,
+              p.id AS patient_id, u.first_name AS patient_first_name, u.last_name AS patient_last_name,
+              d.id AS doctor_id, ud.first_name AS doctor_first_name, ud.last_name AS doctor_last_name
+       FROM appointments a
+       JOIN patients p ON a.patient_id = p.id
+       JOIN users u ON p.user_id = u.id
+       JOIN doctors d ON a.doctor_id = d.id
+       JOIN users ud ON d.user_id = ud.id
+       JOIN specialties s ON d.specialty_id = s.id
+       WHERE a.id = ?`,
+      [id]
+    );
     return rows[0];
   }
 
   static async getByPatientId(patient_id) {
-    const [rows] = await db.query("SELECT * FROM appointments WHERE patient_id = ? ORDER BY appointment_date, appointment_time", [patient_id]);
+    const [rows] = await db.query(
+      `SELECT a.id, a.appointment_date, a.appointment_time, a.reason,
+              s.name AS specialty_name,
+              p.id AS patient_id, u.first_name AS patient_first_name, u.last_name AS patient_last_name,
+              d.id AS doctor_id, ud.first_name AS doctor_first_name, ud.last_name AS doctor_last_name
+       FROM appointments a
+       JOIN patients p ON a.patient_id = p.id
+       JOIN users u ON p.user_id = u.id
+       JOIN doctors d ON a.doctor_id = d.id
+       JOIN users ud ON d.user_id = ud.id
+       JOIN specialties s ON d.specialty_id = s.id
+       WHERE a.patient_id = ?
+       ORDER BY a.appointment_date, a.appointment_time`,
+      [patient_id]
+    );
     return rows;
   }
 
   static async getByDoctorId(doctor_id) {
-    const [rows] = await db.query("SELECT * FROM appointments WHERE doctor_id = ? ORDER BY appointment_date, appointment_time", [doctor_id]);
+    const [rows] = await db.query(
+      `SELECT a.id, a.appointment_date, a.appointment_time, a.reason,
+              s.name AS specialty_name,
+              p.id AS patient_id, u.first_name AS patient_first_name, u.last_name AS patient_last_name,
+              d.id AS doctor_id, ud.first_name AS doctor_first_name, ud.last_name AS doctor_last_name
+       FROM appointments a
+       JOIN patients p ON a.patient_id = p.id
+       JOIN users u ON p.user_id = u.id
+       JOIN doctors d ON a.doctor_id = d.id
+       JOIN users ud ON d.user_id = ud.id
+       JOIN specialties s ON d.specialty_id = s.id
+       WHERE a.doctor_id = ?
+       ORDER BY a.appointment_date, a.appointment_time`,
+      [doctor_id]
+    );
     return rows;
   }
 

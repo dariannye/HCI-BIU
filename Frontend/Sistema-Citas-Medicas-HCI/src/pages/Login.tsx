@@ -1,13 +1,10 @@
-import { useState,  useContext } from "react";
+import { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import ImagenPrincipal from "../assets/ImagenPrincipal.png";
-import { login } from "../services/authApi"; 
-import axios, { AxiosError } from "axios"; 
+import { login } from "../services/authApi";
+import axios, { AxiosError } from "axios";
 import { AuthContext } from "../context/AuthContext";
 import type { User } from "../context/AuthContext";
-
-
-
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -15,9 +12,9 @@ export default function Login() {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-
   const authContext = useContext(AuthContext);
-  if (!authContext) throw new Error("AuthContext must be used within AuthProvider");
+  if (!authContext)
+    throw new Error("AuthContext must be used within AuthProvider");
   const { login: loginContext } = authContext;
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -27,22 +24,28 @@ export default function Login() {
     try {
       const data = await login(email, password);
 
-      // Guardamos en localStorage
-      /*localStorage.setItem("token", data.token);
-      localStorage.setItem("user", JSON.stringify(data.user as User));*/
+      // Guardamos en localStorage el token y el usuario
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user as User));
 
+      // ⚡ Si es paciente, lo guardamos también bajo la clave "patient"
+      if (data.user.role === "patient") {
+        localStorage.setItem("patient", JSON.stringify(data.user));
+      }
+
+      // Guardamos en contexto
       loginContext(data.user as User, data.token);
 
       // Redirección según el rol
-    const role = data.user.role;
-    if (role === "admin") {
-      navigate("/admin");
-    } else {
-      navigate("/dashboard");
-    }
-
+      const role = data.user.role;
+      if (role === "admin") {
+        navigate("/admin");
+      } else if (role === "doctor") {
+        navigate("/doctor-dashboard");
+      } else {
+        navigate("/dashboard"); 
+      }
     } catch (err) {
-      // 👇 Manejo tipado del error
       if (axios.isAxiosError(err)) {
         const serverError = err as AxiosError<{ message: string }>;
         setError(serverError.response?.data?.message || "Error en el login");
