@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Users, Stethoscope, LogOut, List, Plus, Pencil } from "lucide-react";
+import { Users, Stethoscope, LogOut, List, Plus, Pencil, Timer } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 interface User {
@@ -103,6 +103,12 @@ export default function AdminDashboard() {
           >
             <List size={18} /> Especialidades
           </a>
+          <a
+            href="/admin/doctor-availability"
+            className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-blue-600"
+          >
+            <Timer size={18} /> Disponiblidad
+          </a>
         </nav>
         <button
           onClick={handleLogout}
@@ -159,6 +165,8 @@ export default function AdminDashboard() {
                           className={`px-3 py-1 rounded-full text-sm font-medium ${
                             user.role === "admin"
                               ? "bg-red-100 text-red-700"
+                              : user.role === "doctor"
+                              ? "bg-yellow-100 text-yellow-700"
                               : "bg-green-100 text-green-700"
                           }`}
                         >

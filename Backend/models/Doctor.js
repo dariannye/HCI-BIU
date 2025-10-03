@@ -3,7 +3,7 @@ const db = require("../config/db");
 class Doctor {
   static async getAll() {
     const [rows] = await db.query(
-      `SELECT d.*, u.first_name, u.last_name, u.email, s.name AS specialty
+      `SELECT d.*, u.first_name, u.last_name, u.email, u.phone, s.name AS specialty
        FROM doctors d
        JOIN users u ON d.user_id = u.id
        JOIN specialties s ON d.specialty_id = s.id
@@ -14,7 +14,7 @@ class Doctor {
 
   static async getById(id) {
     const [rows] = await db.query(
-      `SELECT d.*, u.first_name, u.last_name, u.email, s.name AS specialty
+      `SELECT d.*, u.first_name, u.last_name, u.email, u.phone, s.name AS specialty
        FROM doctors d
        JOIN users u ON d.user_id = u.id
        JOIN specialties s ON d.specialty_id = s.id

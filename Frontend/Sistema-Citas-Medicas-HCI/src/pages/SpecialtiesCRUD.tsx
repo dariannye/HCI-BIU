@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Users, Stethoscope, LogOut, Plus, List, Pencil } from "lucide-react";
+import { Users, Stethoscope, LogOut, Plus, List, Pencil, Timer } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 interface Specialty {
@@ -117,9 +117,15 @@ export default function SpecialtysDashboard() {
           </a>
           <a
             href="/admin/specialties"
-            className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-blue-600"
+            className="flex items-center gap-2 px-3 py-2 rounded-lg bg-blue-800"
           >
             <List size={18} /> Especialidades
+          </a>
+          <a
+            href="/admin/doctor-availability"
+            className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-blue-600"
+          >
+            <Timer size={18} /> Disponiblidad
           </a>
         </nav>
         <button
@@ -170,7 +176,7 @@ export default function SpecialtysDashboard() {
                       <td className="p-3">
                         <button
                           onClick={() => openEditModal(s)}
-                          className="flex items-center gap-1 px-3 py-1 rounded-lg bg-yellow-500 text-white hover:bg-yellow-600"
+                          className="flex items-center gap-1 text-blue-600 hover:text-blue-800"
                         >
                           <Pencil size={16} /> Editar
                         </button>

@@ -1,13 +1,22 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Users, Stethoscope, LogOut, Plus, List, Edit } from "lucide-react";
+import {
+  Users,
+  Stethoscope,
+  LogOut,
+  Plus,
+  List,
+  Timer,
+  Pencil,
+} from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 interface Doctor {
   id: number;
   first_name: string;
   last_name: string;
-  specialty: string;
+  specialty_id: number; // usamos el id
+  specialty_name?: string; // opcional: lo devuelve el backend con join
   email: string;
   phone: string;
   photo_url: string;
@@ -28,22 +37,22 @@ export default function DoctorsDashboard() {
   const [formData, setFormData] = useState({
     first_name: "",
     last_name: "",
-    specialty: "",
     email: "",
     phone: "",
+    password: "",
+    specialty_id: 0,
     photo_url: "",
   });
 
   const navigate = useNavigate();
 
+  // Cargar doctores
   useEffect(() => {
     const fetchDoctors = async () => {
       try {
         const token = localStorage.getItem("token");
         const res = await axios.get("http://localhost:4000/doctors", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         });
         setDoctors(res.data);
       } catch (err) {
@@ -52,10 +61,10 @@ export default function DoctorsDashboard() {
         setLoading(false);
       }
     };
-
     fetchDoctors();
   }, []);
 
+  // Cargar especialidades
   useEffect(() => {
     const fetchSpecialties = async () => {
       try {
@@ -80,9 +89,10 @@ export default function DoctorsDashboard() {
       setFormData({
         first_name: doctor.first_name,
         last_name: doctor.last_name,
-        specialty: doctor.specialty,
+        specialty_id: doctor.specialty_id,
         email: doctor.email,
         phone: doctor.phone,
+        password: "",
         photo_url: doctor.photo_url,
       });
     } else {
@@ -90,17 +100,24 @@ export default function DoctorsDashboard() {
       setFormData({
         first_name: "",
         last_name: "",
-        specialty: "",
         email: "",
         phone: "",
+        password: "",
+        specialty_id: 0,
         photo_url: "",
       });
     }
     setShowModal(true);
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: name === "specialty_id" ? Number(value) : value,
+    });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -109,16 +126,12 @@ export default function DoctorsDashboard() {
       const token = localStorage.getItem("token");
 
       if (editingDoctor) {
-        // Editar doctor existente
         await axios.put(
           `http://localhost:4000/doctors/${editingDoctor.id}`,
           formData,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
+          { headers: { Authorization: `Bearer ${token}` } }
         );
       } else {
-        // Crear nuevo doctor
         await axios.post("http://localhost:4000/doctors", formData, {
           headers: { Authorization: `Bearer ${token}` },
         });
@@ -129,7 +142,6 @@ export default function DoctorsDashboard() {
         headers: { Authorization: `Bearer ${token}` },
       });
       setDoctors(res.data);
-
       setShowModal(false);
     } catch (err) {
       console.error("Error guardando doctor", err);
@@ -161,6 +173,12 @@ export default function DoctorsDashboard() {
             className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-blue-600"
           >
             <List size={18} /> Especialidades
+          </a>
+          <a
+            href="/admin/doctor-availability"
+            className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-blue-600"
+          >
+            <Timer size={18} /> Disponibilidad
           </a>
         </nav>
         <button
@@ -211,7 +229,12 @@ export default function DoctorsDashboard() {
                       <td className="p-3">
                         {doctor.first_name} {doctor.last_name}
                       </td>
-                      <td className="p-3">{doctor.specialty}</td>
+                      <td className="p-3">
+                        {doctor.specialty_name ||
+                          specialties.find((s) => s.id === doctor.specialty_id)
+                            ?.name ||
+                          "Sin especialidad"}
+                      </td>
                       <td className="p-3">{doctor.email}</td>
                       <td className="p-3">{doctor.phone}</td>
                       <td className="p-3">
@@ -219,7 +242,7 @@ export default function DoctorsDashboard() {
                           onClick={() => openModal(doctor)}
                           className="flex items-center gap-1 text-blue-600 hover:text-blue-800"
                         >
-                          <Edit size={16} /> Editar
+                          <Pencil size={16} /> Editar
                         </button>
                       </td>
                     </tr>
@@ -265,14 +288,14 @@ export default function DoctorsDashboard() {
                 className="w-full p-2 border rounded"
               />
               <select
-                name="specialty"
-                value={formData.specialty}
+                name="specialty_id"
+                value={formData.specialty_id}
                 onChange={handleChange}
                 className="w-full p-2 border rounded"
               >
-                <option value="">Seleccione especialidad</option>
+                <option value={0}>Seleccione especialidad</option>
                 {specialties.map((spec) => (
-                  <option key={spec.id} value={spec.name}>
+                  <option key={spec.id} value={spec.id}>
                     {spec.name}
                   </option>
                 ))}
@@ -301,6 +324,18 @@ export default function DoctorsDashboard() {
                 placeholder="URL Foto"
                 className="w-full p-2 border rounded"
               />
+
+              {!editingDoctor && (
+                <input
+                  type="password"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  placeholder="Contraseña"
+                  className="w-full p-2 border rounded col-span-2"
+                />
+              )}
+
               <div className="col-span-2 flex justify-end gap-2 mt-4">
                 <button
                   type="button"

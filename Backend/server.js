@@ -8,6 +8,7 @@ const patientRoutes = require("./routes/patients");
 const doctorRoutes = require("./routes/doctors");
 const appointmentRoutes = require("./routes/appointments");
 const specialtyRoutes = require("./routes/specialties");
+const doctorAvailabilityRoutes = require("./routes/availability");
 
 const app = express();
 
@@ -27,6 +28,7 @@ app.use("/api/patients", patientRoutes);
 app.use("/api/doctors", doctorRoutes);
 app.use("/api/appointments", appointmentRoutes);
 app.use("/api/specialties", specialtyRoutes);
+app.use("/api/availability", doctorAvailabilityRoutes);
 
 // ===== Puerto =====
 const PORT = process.env.PORT || 5000;

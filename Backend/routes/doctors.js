@@ -1,7 +1,9 @@
 const express = require("express");
 const router = express.Router();
+const bcrypt = require("bcrypt");
 const Doctor = require("../models/Doctor");
 const DoctorAvailability = require("../models/DoctorAvailability");
+const User = require("../models/User");
 
 // Listar todos los doctores (con specialty y user)
 router.get("/", async (req, res) => {
@@ -20,14 +22,51 @@ router.get("/:id", async (req, res) => {
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
+router.get("/doctor/:doctor_id", async (req, res) => {
+  try {
+    const list = await DoctorAvailability.getByDoctorId(req.params.doctor_id);
+    res.json(list);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // Crear doctor
 router.post("/", async (req, res) => {
   try {
-    const { user_id, specialty_id, photo_url, is_active } = req.body;
-    if (!user_id || !specialty_id) return res.status(400).json({ error: "user_id y specialty_id son obligatorios" });
-    const newD = await Doctor.create({ user_id, specialty_id, photo_url, is_active: !!is_active });
-    res.status(201).json(newD);
-  } catch (err) { res.status(500).json({ error: err.message }); }
+    const { first_name, last_name, email, phone, password, specialty_id, photo_url, is_active } = req.body;
+
+    if (!first_name || !last_name || !email || !password || !specialty_id) {
+      return res.status(400).json({ error: "Campos obligatorios faltantes" });
+    }
+
+    // Crear usuario
+    const newUser = await User.create({
+      first_name,
+      last_name,
+      email,
+      phone,
+      password,
+      role: "doctor", 
+      is_active: true,
+    });
+
+    // Crear doctor asociado al usuario
+    const newDoctor = await Doctor.create({
+      user_id: newUser.id,
+      specialty_id,
+      photo_url,
+      is_active: is_active ?? true,
+    });
+
+    res.status(201).json({
+      message: "Doctor y usuario creados correctamente",
+      doctor: newDoctor,
+      user: newUser,
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 // Actualizar doctor
