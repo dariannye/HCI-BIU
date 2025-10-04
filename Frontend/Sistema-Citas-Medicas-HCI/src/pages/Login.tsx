@@ -121,7 +121,6 @@ export default function Login() {
         {/* Links extras */}
         <div className="flex justify-between items-center mt-4 text-sm">
           <Link to="/forgot-password" className="text-blue-600 hover:underline">
-            ¿Olvidaste tu contraseña?
           </Link>
           <Link to="/register" className="text-blue-600 hover:underline">
             Crear cuenta
