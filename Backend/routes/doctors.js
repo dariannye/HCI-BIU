@@ -24,6 +24,32 @@ router.get("/:id", async (req, res) => {
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
+router.get("/by-user/:userId", async (req, res) => {
+  try {
+    const doctor = await Doctor.findByUserId(req.params.userId);
+    if (!doctor) {
+      return res.status(404).json({ error: "Doctor no encontrado" });
+    }
+    res.json(doctor);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+router.get("/by-user/:userId/appointments", async (req, res) => {
+  try {
+    const doctor = await Doctor.findByUserId(req.params.userId);
+    if (!doctor) {
+      return res.status(404).json({ error: "Doctor no encontrado" });
+    }
+
+    const appointments = await Appointment.getByDoctorId(doctor.doctor_id);
+    res.json({ doctor, appointments });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 router.get("/doctor/:doctor_id", async (req, res) => {
   try {
     const list = await DoctorAvailability.getByDoctorId(req.params.doctor_id);

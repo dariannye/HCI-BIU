@@ -24,10 +24,29 @@ class Doctor {
     return rows[0];
   }
 
-  static async findByUserId(user_id) {
-    const [rows] = await db.query("SELECT * FROM doctors WHERE user_id = ?", [user_id]);
-    return rows[0];
+static async findByUserId(user_id) {
+    const [rows] = await db.query(
+      `SELECT d.id AS doctor_id, d.specialty_id,
+              u.id AS user_id, u.first_name, u.last_name, u.email
+       FROM doctors d
+       JOIN users u ON d.user_id = u.id
+       WHERE u.id = ?`,
+      [user_id]
+    );
+    return rows[0]; 
   }
+
+static async findByUserId(user_id) {
+    const [rows] = await db.query(
+      `SELECT d.id AS doctor_id, d.specialty_id,
+              u.id AS user_id, u.first_name, u.last_name, u.email
+       FROM doctors d
+       JOIN users u ON d.user_id = u.id
+       WHERE u.id = ?`,
+      [user_id]
+    );
+    return rows[0];
+  }  
 
   static async create({ user_id, specialty_id, photo_url, is_active }) {
     const [result] = await db.query(
