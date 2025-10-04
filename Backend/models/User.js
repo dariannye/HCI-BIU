@@ -27,6 +27,17 @@ class User {
     return { id: result.insertId, first_name, last_name, email, phone, role };
   }
 
+  static async getFullProfileById(id) {
+    const [rows] = await db.query(`
+      SELECT u.id, u.first_name, u.last_name, u.email, u.phone, u.role,
+             p.birth_date, p.address, p.gender, p.marital_status
+      FROM users u
+      LEFT JOIN patients p ON p.user_id = u.id
+      WHERE u.id = ?
+    `, [id]);
+    return rows[0];
+  }
+
   static async update(id, { first_name, last_name, email, phone, role, password }) {
     const fields = [];
     const values = [];

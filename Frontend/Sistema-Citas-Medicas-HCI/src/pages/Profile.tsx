@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ImagenPrincipal from "../assets/ImagenPrincipal.png";
+import axios from "axios";
 
 interface UserProfile {
   first_name: string;
@@ -15,7 +16,7 @@ interface UserProfile {
 }
 //////
 export default function Profile() {
-  const [user, setUser] = useState<UserProfile | null>(null);
+  /*const [user, setUser] = useState<UserProfile | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -27,10 +28,78 @@ export default function Profile() {
     }
   }, [navigate]);
 
+  useEffect(() => {
+    const fetchProfile = async () => {
+        try {
+        const storedUser = localStorage.getItem("user");
+        if (!storedUser) {
+            navigate("/login");
+            return;
+        }
+
+        const userId = JSON.parse(storedUser).id;
+
+        // Llamada al backend para obtener perfil completo
+        const res = await axios.get(`http://localhost:4000/users/profile/${userId}`);
+        setUser(res.data);
+        } catch (error) {
+        console.error("Error al obtener perfil:", error);
+        }
+    };
+
+    fetchProfile();
+  }, [navigate]);
+
   if (!user) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <p className="text-gray-500">Cargando perfil...</p>
+      </div>
+    );
+  }*/
+
+    const [user, setUser] = useState<UserProfile | null>(null);
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const storedUser = localStorage.getItem("user");
+        if (!storedUser) {
+          navigate("/login");
+          return;
+        }
+
+        const userId = JSON.parse(storedUser).id;
+
+        // Petición al backend para obtener perfil completo
+        const res = await axios.get(`http://localhost:4000/users/profile/${userId}`);
+        setUser(res.data);
+      } catch (error) {
+        console.error("Error al obtener perfil:", error);
+        alert("No se pudo cargar el perfil. Intenta iniciar sesión de nuevo.");
+        navigate("/login");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProfile();
+  }, [navigate]);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <p className="text-gray-500">Cargando perfil...</p>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <p className="text-gray-500">Perfil no disponible.</p>
       </div>
     );
   }

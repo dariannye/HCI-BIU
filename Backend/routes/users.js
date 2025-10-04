@@ -60,4 +60,18 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
+
+// Endpoint para obtener perfil completo
+router.get("/profile/:id", async (req, res) => {
+  try {
+    const profile = await User.getFullProfileById(req.params.id);
+    if (!profile) return res.status(404).json({ message: "Usuario no encontrado" });
+    res.json(profile);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Error al obtener el perfil" });
+  }
+});
+
+
 module.exports = router;
