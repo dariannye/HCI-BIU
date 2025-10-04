@@ -2,6 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useContext  } from "react";
 import ImagenPrincipal from "../assets/ImagenPrincipal.png";
 import { AuthContext } from "../context/AuthContext";
+import { User } from "lucide-react";
 
 export default function Navbar() {
   const navigate = useNavigate();
@@ -60,6 +61,10 @@ export default function Navbar() {
     }
   };*/
 
+  const handleProfileClick = () => {
+    navigate("/profile"); 
+  };
+
   return (
     <nav className="bg-white text-blue-700 px-8 py-4 flex justify-between items-center shadow-md">
       {/* Logo + Título */}
@@ -98,8 +103,20 @@ export default function Navbar() {
         </a>
       </div>
 
-      {/* Botón dinámico */}
-      <div>
+      {/* Botón + Perfil */}
+      <div className="flex items-center gap-4">
+        {/* Mostrar icono de perfil solo si hay login */}
+        {isLoggedIn && (
+          <button
+            onClick={handleProfileClick}
+            className="flex items-center gap-2 text-gray-700 hover:text-blue-600 transition"
+          >
+            <User className="w-6 h-6" />
+            <span className="hidden md:inline font-medium">Perfil</span>
+          </button>
+        )}
+
+        {/* Botón dinámico de login/logout */}
         <button
           onClick={handleAuthClick}
           className="bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 transition"
