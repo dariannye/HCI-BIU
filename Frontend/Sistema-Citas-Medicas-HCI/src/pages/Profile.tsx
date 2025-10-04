@@ -13,7 +13,7 @@ interface UserProfile {
   gender: string;
   marital_status: string;
 }
-
+////
 export default function Profile() {
   const [user, setUser] = useState<UserProfile | null>(null);
   const navigate = useNavigate();
